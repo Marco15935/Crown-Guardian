@@ -1,0 +1,153 @@
+<!DOCTYPE html><html lang="my">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crown Guardian (ဂါဒီယန်)</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background-color: #fff;
+    }
+    header {
+      background-color: #8B0000; /* Soft Blood Red */
+      color: gold;
+      text-align: center;
+      padding: 20px;
+      font-size: 1.5em;
+    }
+    .top-bar {
+      background: #333;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+    }
+    .top-bar .menu {
+      display: flex;
+      gap: 20px;
+    }
+    .top-bar .menu a {
+      color: white;
+      text-decoration: none;
+    }
+    .top-bar .contact {
+      text-align: left;
+    }
+    .product-buttons, .product-sub-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      background-color: #FFD700;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    #cart {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      font-size: 1.5em;
+      cursor: pointer;
+    }
+    .product-sub-buttons {
+      margin-left: 40px;
+    }
+    .checkout {
+      display: none;
+      position: fixed;
+      right: 20px;
+      top: 60px;
+      background: white;
+      border: 1px solid #ccc;
+      padding: 10px;
+      max-width: 300px;
+      z-index: 999;
+    }
+    .checkout p {
+      font-size: 0.9em;
+    }
+    .checkout button {
+      margin: 5px;
+    }
+  </style>
+</head>
+<body>  <div class="top-bar">
+    <div class="menu">
+      <a href="#">Profile</a>
+      <a href="#">Log in</a>
+      <a href="#" onclick="shareLink()">Share</a>
+      <a href="https://maps.google.com/?q=Mingaladon,Yangon" target="_blank">Location</a>
+    </div>
+    <div class="contact">
+      <div>📞 09-428315623</div>
+      <div>📍 ပုလဲလမ်းဆုံ၊ အမှတ်(၃)လမ်းမကြီး၊ မင်္ဂလာဒုံမြို့နယ်၊ ရန်ကုန်။</div>
+    </div>
+    <div id="cart" onclick="showCart()">🛒</div>
+  </div>  <header>
+    ဂါဒီယန် မိသားစုမှ နွေးထွေးပျူငှာစွာ ကြိုဆိုပါ၏<br>
+    <small>Crown Guardian (ဂါဒီယန်) - စက်စီ၊ ချောဆီ ရောင်းဝယ်ရေး</small>
+  </header>  <div class="product-buttons">
+    <button onclick="showSub('engine')">Engine Oil</button>
+    <button onclick="showSub('gear')">Gear Oil</button>
+    <button onclick="showSub('hydraulic')">Hydraulic Oil</button>
+    <button onclick="showSub('grease')">Grease</button>
+    <button onclick="showSub('brake')">Brake Fluid</button>
+    <button onclick="addToCart('ပေပါဆီ')">ပေပါဆီ (Engine Oil)</button>
+    <button onclick="showSub('accessories')">ကားအတွင်းခန်းပစ္စည်းများ</button>
+    <button onclick="showSub('wiper')">Wiper</button>
+  </div>  <div id="sub-buttons" class="product-sub-buttons"></div>  <div id="checkout" class="checkout"></div>  <script>
+    const cart = [];
+
+    function showSub(type) {
+      const sub = document.getElementById('sub-buttons');
+      let html = '';
+      if (type === 'engine') html = ['Ptt','Trane','Stallion','Falcon','ELF'].map(x=>`<button onclick="addToCart('${x}')">${x}</button>`).join('');
+      else if (type === 'gear') html = ['Ptt','Trane'].map(x=>`<button onclick="addToCart('${x}')">${x}</button>`).join('');
+      else if (type === 'hydraulic') html = ['Trane'].map(x=>`<button onclick="addToCart('${x}')">${x}</button>`).join('');
+      else if (type === 'grease') html = ['Trane','Crown','မိချောင်းတံဆိပ်အမဲဆီ'].map(x=>`<button onclick="addToCart('${x}')">${x}</button>`).join('');
+      else if (type === 'brake') html = ['Trane'].map(x=>`<button onclick="addToCart('${x}')">${x}</button>`).join('');
+      else html = `<p>ဤအမျိုးအစားအတွက် မသတ်မှတ်ရသေးပါ။</p>`;
+      sub.innerHTML = html;
+    }
+
+    function addToCart(item) {
+      cart.push(item);
+      alert(item + ' ကိုဈေးခြင်းထဲသို့ထည့်လိုက်ပါသည်။');
+    }
+
+    function showCart() {
+      const div = document.getElementById('checkout');
+      if (div.style.display === 'block') { div.style.display = 'none'; return; }
+      const list = cart.map(i => `<p>🛒 ${i}</p>`).join('');
+      div.innerHTML = list + '<p><b>📍 လိပ်စာရွေးပါ:</b></p>' +
+        '<select id="area"><option>မင်္ဂလာဒုံ</option><option>အခြားနေရာ</option></select><br>' +
+        '<button onclick="confirmOrder()">✅ Confirm</button><button onclick="cancelOrder()">❌ Cancel</button>';
+      div.style.display = 'block';
+    }
+
+    function confirmOrder() {
+      const area = document.getElementById('area').value;
+      if (area === 'မင်္ဂလာဒုံ') {
+        alert('မင်္ဂလာဒုံအတွင်းဖြစ်သောကြောင့် မှာယူမှုကိုအောင်မြင်စွာအတည်ပြုပေးပါသည်။');
+      } else {
+        alert('အော်ဒါမှာယူခွင့်မရနိုင်သေးပါ။ ကျေးဇူးတင်ရှိပါသည်။');
+      }
+    }
+
+    function cancelOrder() {
+      document.getElementById('checkout').style.display = 'none';
+    }
+
+    function shareLink() {
+      navigator.clipboard.writeText(window.location.href);
+      alert('Link ကို Copy လုပ်ပြီးပါပြီ။ Share ထားနိုင်ပါပြီ။');
+    }
+  </script></body>
+</html>
